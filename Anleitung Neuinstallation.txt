@@ -1,0 +1,162 @@
+Querchat v1.0 by kill0rz (C) 2014 - visit kill0rz.com
+
+Copyright
+#########
+
+Dieser Hack wurde unter "kill0rz' Unilecence v1.0 vom 08.08.2014" veröfentlicht. Diese liegt bei.
+
+Installationszeit
+#################
+
+Inklusive Konfiguration etwa 5-15min.
+Lass dich bitte nicht von der Länge dieser Anleitung täuschen, hier ist alles ausführlich erklärt.
+
+Beschreibung
+############
+
+Der Querchat ist - kurz gesagt - eine Shoutbox über mehrere Foren hinweg. Mehrere WBB2-Foren verbinden sich zu einem Server, der die Shouts zentral speichert. Somit können mehrere, unäbhängige Forensysteme in eine Shoutbox schreiben.
+
+Features
+########
+
++BB-Codes b, u, i werden übersetzt
++URLs werden automatisch klickbar gemacht
++HTML-Code wird automatisch gefiltert
+
+FAQ
+###
+
+Q: Warum keine Smileys?
+A: Jedes Forum nutzt andere Smilies. Zwar könnte man nur das jeweilige Smiley-Set des gerade besuchten Boards nehmen, jedoch sieht z.B. der :D immer anders aus und kann so den Kontext verändern.
+   Ein Querverlinken wäre zwar möglich (wird ggf. auf Wunsch auch umgesetzt), rechtfertigt aber für eine erste Version den Aufwand nicht.
+   
+Q: Kann ich Server und Client auch parallel verwenden?
+A: Ja, selbstverständlich!
+
+Q: Werden die Shouts beim Client gespeichert?
+A: Nein, es gibt auch kein Buffering. Alles ist vom Server abhängig. Dies ist nötig, um die Synchronisation zu gewährleisten.
+
+Q: Gibt es Traffic-Probleme?
+A: Bei schlecht konfigurierten Servern und sehr stark besuchten Foren ist es in der Tat möglich, dass Zugriffe geblockt werden.
+   Der Client greift auf den Server via CURL und einem Mozilla FireFox-Useragent zu, sodass der Zugriff realistisch aussieht.
+   
+Q: Ist der Hack über das ACP steuerbar?
+A: Nein, er wird über das Frontend gesteuert, was aber nur einmal gemacht werden muss.
+
+Q: Wie viele Foren können maximal auf einen Server zugreifen?
+A: Es gibt keine Beschränkung. Je nach Aktivität wird es aber sehr schnell sehr unübersichtlich, wenn zu viele Foren sich einklinken.
+
+Q: Kann jeder einfach so auf die Shouts zugreifen?
+A: Nein! Nur, wenn Board-ID, Authentifizierungsstring und URL zum Server bekannt sind, kann auf die Shouts zugegriffen werden. Jedes Forum muss beim Server einzeln registriert sein.
+
+Q: Kann man unterscheiden, von wem der Shout kam, auch bei gleichen Usernamen in verschiedenen Foren?
+A: Ja, jedem Forum wird ein Präfix zugewiesen. Außerdem steht ein Profillink hinter dem Namen.
+
+Q: Brauche ich ein lauffähiges WBB2.3.6, um den Server zu betreiben?
+A: Ja, das ist nötig.
+
+
+Changelog
+#########
+
+v1.0 (24.08.2014)
+----
+Grundskript
+
+Installtion #1
+###########
+
+Zunächst musst du wissen, was du installierst: Server oder Client
+
+Um Querchat zu nutzen, muss in _einem_ Forum der Server installiert sein.
+Der Client muss in jedem Forum installiert sein, auch in dem Forum, in dem der Server läuft (zuerst den Server installieren, bitte).
+
+Installation Server
+-------------------
+
+Lade aus dem Verzeichnis Server/wbb2/ die Dateien in dein Verzeichnis.
+Führe die SQL-Befehle aus der db.sql aus (vorzugsweise phpmyadmin).
+
+Öffne nun die Datei querchat_server_config.php mit einem Texteditor. Du findest in Zweile 8 eine if-Abfrage, die nicht erlaubte Nutzer blockt. Ändere diese Abfrage bitte entsprechend ab, sodass du das Script nutzen kannst.
+Bei Fragen, wende dich an mich!
+Fertig. :)
+
+Installation Client
+-------------------
+
+Lade aus dem Verzeichnis Client/wbb2/ die Dateien in dein Verzeichnis.
+Führe die SQL-Befehle aus der db.sql aus (vorzugsweise phpmyadmin).
+Öffne nun die Datei querchat_config.php mit einem Texteditor. Du findest in Zweile 8 eine if-Abfrage, die nicht erlaubte Nutzer blockt. Ändere diese Abfrage bitte entsprechend ab, sodass du das Script nutzen kannst.
+Bei Fragen, wende dich an mich!
+
+Konfiguration
+#############
+
+Server
+------
+
+Damit die Shoutbox auch funktioniert, muss jedes Forum einzeln beim server eingetragen werden.
+Öffne die querchat_server_config.php im Bowser und fülle die Felder aus.
+[Demobild1.jpg]
+Name des Forums: Der Name des Forums (dient nur Identifikation, wird nicht öffentlich)
+URL zum Forum: Die URL zum Forum, beginnend mit http://. Es wird hier nicht der Link zur Hauptdomain gefordert, sondern der direkte Link zum Forum, ggf. also mit /wbb2/ aufhörend.
+Präfix: Dient zur öffentlichen Identifikation des Forum und wird jedem Nutzernamen vorangestellt.
+
+Anschließend erhälst du eine Foren-ID und einen Authentifizierungsstring. Gib diese beiden Informationen und die URL zur querchat_server.php (wird vorgeschlagen) an den Client weiter.
+[Demobild2.jpg]
+
+Hinweis: Authentifizierungsstring und ID sind gleichbedeutend mit Nutzername und Passwort - also aufpassen, wer das in die Hand bekommt.
+Du kannst beides durch Klicken auf das Löschen-Feld deaktivieren. Die Daten bleiben in der Datenbank (damit Shouts von gelöschten Board weiterhin korrekt dargestellt werden), die Foren können aber sich nicht mehr verbinden.
+
+
+
+Client
+------
+
+Rufe die querchat_config.php im Browser auf.
+[Demobild3.jpg]
+
+Entsprechend werden diese Daten jetzt hier eingetragen. Die URL beginnt auch hier wieder mit http:// und endet mit querchat_server.php .
+Nach dem Abschicken wird die Seite durch Klick auf den Link neu geladen.
+[Demobild4.jpg]
+
+Da jetzt aber jeder Depp hier irgendwas eintragen könnte, muss die Verbindung noch verifiziert werden. Entsprechend den Link klicken.
+[Demobild5.jpg]
+Hast du dich vertippt? Via Button löschen.
+
+Das war die ganze Konfiguration. Es erscheint folgende Meldung:
+[Demobild6.jpg]
+
+Installtion #2
+###########
+
+Nun müssen wir nur noch schnell einen IFRAME in das Index-Template einbinden:
+
+Template: index
+---------
+
+Suche: 
+
+<table cellpadding="{$style['tableincellpadding']}" cellspacing="{$style['tableincellspacing']}" border="{$style['tableinborder']}" style="width:{$style['tableinwidth']}" class="tableinborder">
+
+Füge darüber ein:
+
+<iframe src="./querchat.php" width=100% height=270></iframe>
+
+
+
+
+Wenn auf dem Server noch kein Eintrag vorhanden ist, dann erscheint eine Fehlermdung, dass die Verbindung nicht erfolgreich war. Sollte die querchat_config.php hingegen bei der Verifizierung keine Fehler produziert haben, ist aber alles in Ordnung.
+Die Meldung verschwindet mit dem ersten Shout.
+
+Weitere Boards fügst du entsprechend hinzu.
+
+FERTIG!
+Shouts aller Clients werden an den Server gesendet und dort gepseichert.
+Dargestellt werden - Zwecks Übersicht - nur die letzten 10 Shouts.
+
+Viel Spaß bei der Verwendung,
+kill0rz
+http://kill0rz.com/
+
+Stand: 27.08.2014
